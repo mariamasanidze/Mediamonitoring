@@ -633,6 +633,8 @@
       </div>
       <div class="cta-right">
         <form id="leadForm" novalidate>
+            <input type="hidden" name="subject" value="MediaMonitoring AI — დემოს მოთხოვნა">
+            <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
           <div class="field"><label>სახელი და გვარი <span class="req">*</span></label>
             <input type="text" name="name" placeholder="თქვენი სახელი" required><div class="me">შეავსეთ სახელი</div></div>
           <div class="field"><label>სამუშაო ელ-ფოსტა <span class="req">*</span></label>
@@ -709,31 +711,101 @@ if('IntersectionObserver' in window && !reduce){
     line.style.transition='stroke-dashoffset 1.6s ease'; setTimeout(function(){ line.style.strokeDashoffset=0; },300); }catch(e){}
 })();
 
-/* feed animation */
+/* feed engine — continuous live stream */
 (function(){
-  var ms=document.querySelectorAll('#feedBody .mention');
-  var alert=document.getElementById('alert');
-  if(reduce){ ms.forEach(function(m){m.classList.add('show')}); alert.classList.add('show'); return; }
-  var timers=[];
-  function run(){
-    ms.forEach(function(m){m.classList.remove('show')});
-    alert.classList.remove('show');
-    ms.forEach(function(m){ timers.push(setTimeout(function(){m.classList.add('show')}, parseInt(m.dataset.d)+350)); });
-    timers.push(setTimeout(function(){ alert.classList.add('show'); }, 3000));
-    timers.push(setTimeout(run, 8200));
+  var body=document.getElementById('feedBody');
+  var alertEl=document.getElementById('alert');
+  var alertTxt=document.getElementById('alertTxt');
+  var countEl=document.getElementById('count');
+  var barP=document.getElementById('barP'), barN=document.getElementById('barN'), barU=document.getElementById('barU');
+  if(!body) return;
+
+  var POOL=[
+   {s:'neg',src:'X · @user_geo',t:'კიდევ ერთი დღეა, <mark>Aura</mark>-ს აპლიკაცია ვერ იხსნება. რა ხდება?'},
+   {s:'pos',src:'blog · medium.com',t:'<mark>Aura</mark>-ს ახალი ფუნქცია ნამდვილად მოსახერხებელია — რეკომენდაციას ვუწევ.'},
+   {s:'neu',src:'news · Publika.ge',t:'კომპანია <mark>Aura</mark> ახალ პარტნიორობას აანონსებს მომავალი კვირიდან.'},
+   {s:'pos',src:'Facebook · გვერდი',t:'დღეს <mark>Aura</mark>-ს მხარდაჭერამ სწრაფად მომაგვარა საკითხი. მადლობა!'},
+   {s:'neg',src:'X · @tech_ge',t:'<mark>Aura</mark>-ს გადახდის სისტემა მესამედ ჩავარდა ამ კვირაში.'},
+   {s:'neu',src:'news · On.ge',t:'<mark>Aura</mark> შემოდის ახალ ბაზარზე — დეტალები ინტერვიუში.'},
+   {s:'neg',src:'Facebook · ჯგუფი',t:'ვერ დავუკავშირდი <mark>Aura</mark>-ს ცხელ ხაზს დილიდან. იმედგაცრუებული ვარ.'},
+   {s:'pos',src:'blog · blogspot',t:'<mark>Aura</mark>-ს ინტერფეისი გაცილებით სუფთა გახდა ბოლო განახლების შემდეგ.'},
+   {s:'pos',src:'X · @marketing_geo',t:'<mark>Aura</mark>-ს ახალი კამპანია მაგარია, კრეატივი ტოპ დონეზეა.'},
+   {s:'neu',src:'news · Netgazeti',t:'ექსპერტები აფასებენ <mark>Aura</mark>-ს ახალ სტრატეგიას.'},
+   {s:'neg',src:'Facebook · მომხმ.',t:'<mark>Aura</mark>-მ თანხა ჩამომჭრა, სერვისი კი არ მომაწოდა.'},
+   {s:'pos',src:'X · @ana_k',t:'<mark>Aura</mark> ნამდვილად გაუმჯობესდა. კმაყოფილი მომხმარებელი ვარ.'}
+  ];
+  var META={pos:{c:'#0FB07A',l:'დადებითი'},neu:{c:'#8A94A6',l:'ნეიტრალური'},neg:{c:'#F23B59',l:'უარყოფითი'}};
+  var MAX=4, TH=10;
+  var tot={pos:512,neu:438,neg:254}, day=1204, negHour=8, breached=false, idx=0;
+
+  function fmt(n){ return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,','); }
+  function bars(){
+    var t=tot.pos+tot.neu+tot.neg;
+    var p=Math.round(tot.pos/t*100), u=Math.round(tot.neg/t*100), n=100-p-u;
+    if(barP) barP.style.width=p+'%'; if(barN) barN.style.width=n+'%'; if(barU) barU.style.width=u+'%';
   }
-  var started=false;
-  var ob=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting&&!started){started=true;run();}});},{threshold:.3});
+  function card(item){
+    var m=META[item.s];
+    var el=document.createElement('div'); el.className='mention'; el.dataset.age='0';
+    el.innerHTML='<div class="top"><span class="src"><i style="background:'+m.c+'"></i>'+item.src+'</span>'+
+      '<span class="time">ახლახ</span></div><div class="mtxt">'+item.t+'</div>'+
+      '<span class="stag '+item.s+'">'+m.l+'</span>';
+    return el;
+  }
+  function age(){
+    body.querySelectorAll('.mention').forEach(function(el){
+      var a=parseInt(el.dataset.age||'0')+1; el.dataset.age=a;
+      var tEl=el.querySelector('.time'); if(tEl) tEl.textContent=a+' წთ';
+    });
+  }
+  function fireAlert(){
+    alertTxt.textContent='უარყოფითი ნახსენები: '+negHour+' / 1სთ · ზღვარი '+TH+' — შეტყობინება გაიგზავნა';
+    alertEl.classList.add('show'); breached=true;
+    setTimeout(function(){ negHour=2; breached=false; alertEl.classList.remove('show'); }, 7000);
+  }
+  function tick(){
+    age();
+    var item=POOL[idx%POOL.length]; idx++;
+    var el=card(item); body.insertBefore(el, body.firstChild);
+    void el.offsetWidth; el.classList.add('show');
+    tot[item.s]++; day += 1 + Math.floor(Math.random()*3);
+    if(countEl) countEl.textContent=fmt(day);
+    bars();
+    if(item.s==='neg'){ negHour++; if(negHour>=TH && !breached) fireAlert(); }
+    var cards=body.querySelectorAll('.mention');
+    if(cards.length>MAX){ var last=cards[cards.length-1]; last.classList.add('out'); setTimeout(function(){ if(last.parentNode) last.parentNode.removeChild(last); },450); }
+  }
+
+  if(reduce){
+    for(var i=0;i<MAX;i++){ var el=card(POOL[i]); el.classList.add('show'); el.querySelector('.time').textContent=(i===0?'ახლახ':i+' წთ'); body.appendChild(el); }
+    bars(); alertTxt.textContent='უარყოფითი ნახსენები: 12 / 1სთ · ზღვარი 10 — შეტყობინება გაიგზავნა'; alertEl.classList.add('show');
+    return;
+  }
+
+  /* sparkline live update */
+  var line=document.getElementById('sparkLine'), dot=document.getElementById('sparkDot');
+  var ys=[24,21,23,17,19,12,15,9,18,7,14,5,11], sc=0;
+  function spark(){
+    ys.shift(); ys.push(4+Math.random()*22);
+    var step=320/(ys.length-1), pts=ys.map(function(y,i){return (i*step).toFixed(0)+','+y.toFixed(0);}).join(' ');
+    if(line){ line.style.transition='none'; line.style.strokeDasharray=''; line.style.strokeDashoffset=''; line.setAttribute('points',pts); }
+    if(dot){ dot.setAttribute('cx',(320).toString()); dot.setAttribute('cy',ys[ys.length-1].toFixed(0)); }
+  }
+
+  var started=false, iv=null;
+  function begin(){
+    tick(); setTimeout(tick,650); setTimeout(tick,1300);
+    iv=setInterval(function(){ tick(); sc++; if(sc%2===0) spark(); }, 2200);
+  }
+  var ob=new IntersectionObserver(function(en){ en.forEach(function(e){ if(e.isIntersecting && !started){ started=true; begin(); } }); },{threshold:.3});
   ob.observe(document.getElementById('feed'));
 })();
 
-/* ---- lead form (Formspree) ----
-   TO RECEIVE SUBMISSIONS BY EMAIL:
-   1. Create a free form at https://formspree.io
-   2. Copy your form ID (looks like  xayzqwkd )
-   3. Replace YOUR_FORM_ID below.
-   Until then the form runs in demo mode (shows success only). */
-var FORMSPREE_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID";
+/* ---- lead form → Web3Forms ----
+   Submissions are delivered to the email address tied to the access key below (W3F_KEY).
+   To change the destination or key, get a new key at https://web3forms.com and replace W3F_KEY. */
+var W3F_KEY = "9399b7ad-c7aa-4fa4-a634-b60fcc13d666";
+var FORM_ENDPOINT = "https://api.web3forms.com/submit";
 (function(){
   var form=document.getElementById('leadForm'); if(!form) return;
   var ferr=document.getElementById('ferr');
@@ -753,9 +825,9 @@ var FORMSPREE_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID";
   form.addEventListener('submit',function(e){
     e.preventDefault(); ferr.classList.remove('show');
     if(!valid()){ var fe=form.querySelector('.field.err'); if(fe) fe.scrollIntoView({behavior:'smooth',block:'center'}); return; }
-    if(FORMSPREE_ENDPOINT.indexOf('YOUR_FORM_ID')!==-1){ success(); return; }
     var btn=form.querySelector('button[type=submit]'); btn.disabled=true;
-    fetch(FORMSPREE_ENDPOINT,{method:'POST',body:new FormData(form),headers:{'Accept':'application/json'}})
+    var data=new FormData(form); data.append('access_key', W3F_KEY);
+    fetch(FORM_ENDPOINT,{method:'POST',body:data,headers:{'Accept':'application/json'}})
       .then(function(r){ if(r.ok){success();} else {ferr.classList.add('show');btn.disabled=false;} })
       .catch(function(){ ferr.classList.add('show');btn.disabled=false; });
   });
