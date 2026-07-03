@@ -49,18 +49,27 @@
 
   body{
     font-family:"Noto Sans Georgian","Inter",system-ui,sans-serif;
-    background:var(--bg);color:var(--ink-2);
+    color:var(--ink-2);
     font-size:15px;line-height:1.68;
     -webkit-font-smoothing:antialiased;overflow-x:hidden;
+    /* single cohesive purple gradient spanning the whole page */
+    background:
+      linear-gradient(180deg,
+        #0B0912 0%,
+        #0E0A1B 20%,
+        #120A22 42%,
+        #0E0A1B 64%,
+        #0C0916 84%,
+        #0B0912 100%);
   }
   html[data-lang="en"] body{font-family:"Inter","Noto Sans Georgian",system-ui,sans-serif}
-  /* ambient glows */
+  /* ambient purple glows — one accent colour, layered over the gradient */
   body::before{
     content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
     background:
-      radial-gradient(760px 520px at 82% -10%, rgba(139,92,246,.18), transparent 60%),
-      radial-gradient(680px 520px at -6% 4%, rgba(91,141,239,.10), transparent 58%),
-      radial-gradient(600px 600px at 50% 108%, rgba(240,87,126,.06), transparent 60%);
+      radial-gradient(820px 560px at 84% -8%, rgba(139,92,246,.22), transparent 62%),
+      radial-gradient(720px 620px at -8% 30%, rgba(124,58,237,.12), transparent 60%),
+      radial-gradient(760px 640px at 108% 78%, rgba(139,92,246,.13), transparent 62%);
   }
   body::after{
     content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4;
@@ -191,10 +200,10 @@
 
   /* stat band */
   .stats{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:rgba(255,255,255,.02)}
-  .stats .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;padding:34px 24px}
-  .stat .n{font-weight:800;font-size:clamp(1.55rem,2.6vw,2rem);line-height:1;color:var(--ink)}
+  .stats .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;padding:clamp(38px,4vw,52px) 24px}
+  .stat .n{font-weight:800;font-size:clamp(1.35rem,1.7vw,1.8rem);line-height:1;color:var(--brand-3)}
   .stat .n em{color:var(--brand-3);font-style:normal}
-  .stat .l{color:var(--muted);font-size:.82rem;margin-top:9px;line-height:1.55}
+  .stat .l{color:var(--muted);font-size:.82rem;margin-top:10px;line-height:1.55}
   .stat:not(:last-child){border-right:1px solid var(--line);padding-right:24px}
 
   /* sections */
@@ -229,15 +238,21 @@
   /* function sections */
   .fnsec{padding:clamp(54px,7.5vw,96px) 0}
   .fnsec.alt{background:rgba(255,255,255,.02);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-  .fn-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(34px,4.5vw,60px);align-items:center}
-  .fnsec.rev .fn-copy{order:2}
+  /* heading sits full-width on top */
+  .fn-head{max-width:820px;margin-bottom:clamp(30px,3.8vw,46px)}
+  .fn-head h2{margin-top:15px;text-wrap:balance}
+  .fn-head .lead{margin-top:13px;max-width:60ch}
+  .fn-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(32px,4.5vw,58px);align-items:center}
+  .fn-grid.rev{grid-template-columns:1fr 1.05fr}
+  .fn-grid.rev .fn-side{order:2}
+  .fn-side{min-width:0}
   .fn-badge{display:inline-flex;align-items:center;gap:.55em;font-family:"IBM Plex Mono",monospace;font-size:.66rem;font-weight:600;
     letter-spacing:.1em;text-transform:uppercase;color:var(--brand-3);background:var(--brand-soft);border:1px solid var(--brand-line);
     padding:.5em .8em;border-radius:9px}
   .fn-badge svg{width:14px;height:14px;stroke:var(--brand-3);stroke-width:1.9}
   .fnsec h2{margin-top:16px}
   .fnsec .lead{margin-top:13px;max-width:38em}
-  .fn-list{list-style:none;margin-top:22px;display:flex;flex-direction:column;gap:13px}
+  .fn-list{list-style:none;display:flex;flex-direction:column;gap:14px}
   .fn-list li{display:flex;gap:11px;align-items:flex-start}
   .fn-list .ic{width:24px;height:24px;border-radius:7px;background:var(--brand-soft);border:1px solid var(--brand-line);
     display:flex;align-items:center;justify-content:center;flex:none;margin-top:2px}
@@ -437,8 +452,8 @@
     .hero-grid{grid-template-columns:1fr;gap:38px}.feed{max-width:540px}
     .stats .wrap{grid-template-columns:1fr 1fr;gap:24px}.stat:nth-child(2){border-right:none;padding-right:0}
     .ov{grid-template-columns:1fr}
-    .fn-grid{grid-template-columns:1fr;gap:32px}
-    .fnsec.rev .fn-copy{order:0}
+    .fn-grid,.fn-grid.rev{grid-template-columns:1fr;gap:30px}
+    .fn-grid.rev .fn-side{order:0}
     .uses{grid-template-columns:1fr 1fr}
     .adapt-grid{grid-template-columns:1fr;gap:30px}
     .cta-card{grid-template-columns:1fr}
@@ -587,76 +602,84 @@
 
 <!-- FUNCTION 1 — KEYWORD SEARCH -->
 <section class="fnsec alt" id="search">
-  <div class="wrap fn-grid">
-    <div class="fn-copy reveal">
+  <div class="wrap">
+    <div class="fn-head reveal">
       <span class="fn-badge"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><span data-i="f1badge"></span></span>
       <h2 data-i="f1h2"></h2>
       <p class="lead" data-i="f1lead"></p>
-      <ul class="fn-list">
+    </div>
+    <div class="fn-grid reveal">
+      <div class="fn-side">
+        <ul class="fn-list">
         <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></span><div><b data-i="f1b1"></b><em data-i="f1e1"></em></div></li>
         <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></span><div><b data-i="f1b2"></b><em data-i="f1e2"></em></div></li>
         <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></span><div><b data-i="f1b3"></b><em data-i="f1e3"></em></div></li>
         <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></span><div><b data-i="f1b4"></b><em data-i="f1e4"></em></div></li>
         <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></span><div><b data-i="f1b5"></b><em data-i="f1e5"></em></div></li>
-      </ul>
-    </div>
-    <div class="fn-visual reveal">
-      <div class="smock playable" id="smock">
-        <div class="sm-bar">
-          <svg class="mag" viewBox="0 0 24 24" fill="none" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-          <div class="sm-chips"><span class="chip">Aura</span><span class="chip" data-i="chipComp"></span></div>
-          <span class="sm-run" data-i="smRun"></span>
+        </ul>
+      </div>
+      <div class="fn-visual reveal">
+        <div class="smock playable" id="smock">
+          <div class="sm-bar">
+            <svg class="mag" viewBox="0 0 24 24" fill="none" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+            <div class="sm-chips"><span class="chip">Aura</span><span class="chip" data-i="chipComp"></span></div>
+            <span class="sm-run" data-i="smRun"></span>
+          </div>
+          <div class="sm-body" id="smBody"></div>
         </div>
-        <div class="sm-body" id="smBody"></div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- FUNCTION 2 — ANALYTICAL REPORTS -->
-<section class="fnsec rev" id="reports">
-  <div class="wrap fn-grid">
-    <div class="fn-copy reveal">
+<section class="fnsec" id="reports">
+  <div class="wrap">
+    <div class="fn-head reveal">
       <span class="fn-badge"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="7" rx="1"/><rect x="13" y="6" width="3" height="12" rx="1"/></svg><span data-i="f2badge"></span></span>
       <h2 data-i="f2h2"></h2>
       <p class="lead" data-i="f2lead"></p>
-      <ul class="fn-list">
+    </div>
+    <div class="fn-grid rev reveal">
+      <div class="fn-side">
+        <ul class="fn-list">
         <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></span><div><b data-i="f2b1"></b><em data-i="f2e1"></em></div></li>
         <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></span><div><b data-i="f2b2"></b><em data-i="f2e2"></em></div></li>
         <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></span><div><b data-i="f2b3"></b><em data-i="f2e3"></em></div></li>
         <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></span><div><b data-i="f2b4"></b><em data-i="f2e4"></em></div></li>
-      </ul>
-      <div class="srcs">
-        <span>Publika</span><span>On.ge</span><span>Netgazeti</span><span>Rustavi2</span><span>Imedi</span><span>Forbes</span><span>Commersant</span><span>1TV</span><span class="more" data-i="srcMore"></span>
-      </div>
-    </div>
-    <div class="fn-visual reveal">
-      <div class="repwrap playable" id="repwrap">
-        <div class="report">
-          <div class="rhead">
-            <span class="fic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><path d="M14 3v5h5M7 3h7l5 5v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/></svg></span>
-            <span class="rt"><span data-i="repTitle"></span><span data-i="repSub"></span></span>
-            <span class="fmt">PDF</span>
-          </div>
-          <div class="rbody">
-            <div class="rstat">
-              <div class="rs"><div class="v" id="rv1" data-target="1248">0</div><div class="k" data-i="repK1"></div></div>
-              <div class="rs"><div class="v" id="rv2" data-target="86">0</div><div class="k" data-i="repK2"></div></div>
-              <div class="rs"><div class="v" id="rv3">+12%</div><div class="k" data-i="repK3"></div></div>
-            </div>
-            <div class="rsent">
-              <div class="rsrow"><span class="rl" style="color:var(--pos)" data-i="repPos"></span><span class="bar"><i data-w="42" style="background:var(--pos)"></i></span><span class="pct">42%</span></div>
-              <div class="rsrow"><span class="rl" style="color:var(--neu)" data-i="repNeu"></span><span class="bar"><i data-w="35" style="background:var(--neu)"></i></span><span class="pct">35%</span></div>
-              <div class="rsrow"><span class="rl" style="color:var(--neg)" data-i="repNeg"></span><span class="bar"><i data-w="23" style="background:var(--neg)"></i></span><span class="pct">23%</span></div>
-            </div>
-            <div class="rsum">
-              <div class="h"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M5 12H1M23 12h-4M19 5l-3 3M8 16l-3 3"/></svg><span data-i="repAI"></span></div>
-              <p data-i="repSum"></p>
-            </div>
-          </div>
+        </ul>
+        <div class="srcs">
+          <span>Publika</span><span>On.ge</span><span>Netgazeti</span><span>Rustavi2</span><span>Imedi</span><span>Forbes</span><span>Commersant</span><span>1TV</span><span class="more" data-i="srcMore"></span>
         </div>
-        <div class="ctypes">
-          <span data-i="ct1"></span><span data-i="ct2"></span><span data-i="ct3"></span><span data-i="ct4"></span><span data-i="ct5"></span><span data-i="ct6"></span>
+      </div>
+      <div class="fn-visual reveal">
+        <div class="repwrap playable" id="repwrap">
+          <div class="report">
+            <div class="rhead">
+              <span class="fic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><path d="M14 3v5h5M7 3h7l5 5v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/></svg></span>
+              <span class="rt"><span data-i="repTitle"></span><span data-i="repSub"></span></span>
+              <span class="fmt">PDF</span>
+            </div>
+            <div class="rbody">
+              <div class="rstat">
+                <div class="rs"><div class="v" id="rv1" data-target="1248">0</div><div class="k" data-i="repK1"></div></div>
+                <div class="rs"><div class="v" id="rv2" data-target="86">0</div><div class="k" data-i="repK2"></div></div>
+                <div class="rs"><div class="v" id="rv3">+12%</div><div class="k" data-i="repK3"></div></div>
+              </div>
+              <div class="rsent">
+                <div class="rsrow"><span class="rl" style="color:var(--pos)" data-i="repPos"></span><span class="bar"><i data-w="42" style="background:var(--pos)"></i></span><span class="pct">42%</span></div>
+                <div class="rsrow"><span class="rl" style="color:var(--neu)" data-i="repNeu"></span><span class="bar"><i data-w="35" style="background:var(--neu)"></i></span><span class="pct">35%</span></div>
+                <div class="rsrow"><span class="rl" style="color:var(--neg)" data-i="repNeg"></span><span class="bar"><i data-w="23" style="background:var(--neg)"></i></span><span class="pct">23%</span></div>
+              </div>
+              <div class="rsum">
+                <div class="h"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M5 12H1M23 12h-4M19 5l-3 3M8 16l-3 3"/></svg><span data-i="repAI"></span></div>
+                <p data-i="repSum"></p>
+              </div>
+            </div>
+          </div>
+          <div class="ctypes">
+            <span data-i="ct1"></span><span data-i="ct2"></span><span data-i="ct3"></span><span data-i="ct4"></span><span data-i="ct5"></span><span data-i="ct6"></span>
+          </div>
         </div>
       </div>
     </div>
@@ -665,30 +688,34 @@
 
 <!-- FUNCTION 3 — TV MONITORING -->
 <section class="fnsec alt" id="tv">
-  <div class="wrap fn-grid">
-    <div class="fn-copy reveal">
+  <div class="wrap">
+    <div class="fn-head reveal">
       <span class="fn-badge"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="13" rx="2"/><path d="M8 3l4 3 4-3"/><path d="M7 12h4M7 15h7"/></svg><span data-i="f3badge"></span></span>
       <h2 data-i="f3h2"></h2>
       <p class="lead" data-i="f3lead"></p>
-      <ul class="fn-list">
+    </div>
+    <div class="fn-grid reveal">
+      <div class="fn-side">
+        <ul class="fn-list">
         <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></span><div><b data-i="f3b1"></b><em data-i="f3e1"></em></div></li>
         <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></span><div><b data-i="f3b2"></b><em data-i="f3e2"></em></div></li>
         <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></span><div><b data-i="f3b3"></b><em data-i="f3e3"></em></div></li>
         <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></span><div><b data-i="f3b4"></b><em data-i="f3e4"></em></div></li>
         <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></span><div><b data-i="f3b5"></b><em data-i="f3e5"></em></div></li>
-      </ul>
-    </div>
-    <div class="fn-visual reveal">
-      <div class="tmock" id="tmock">
-        <div class="t-head">
-          <span class="t-src"><span class="tv"></span><span data-i="tvSrc"></span></span>
-          <span class="rec">REC</span>
-          <span class="t-lang">ka</span>
-        </div>
-        <div class="t-body" id="tBody"></div>
-        <div class="t-foot">
-          <span class="kw"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><span data-i="tvFound"></span>&nbsp;<b id="kwCount">3</b></span>
-          <span class="cur" id="tCur">00:04:12</span>
+        </ul>
+      </div>
+      <div class="fn-visual reveal">
+        <div class="tmock" id="tmock">
+          <div class="t-head">
+            <span class="t-src"><span class="tv"></span><span data-i="tvSrc"></span></span>
+            <span class="rec">REC</span>
+            <span class="t-lang">ka</span>
+          </div>
+          <div class="t-body" id="tBody"></div>
+          <div class="t-foot">
+            <span class="kw"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><span data-i="tvFound"></span>&nbsp;<b id="kwCount">3</b></span>
+            <span class="cur" id="tCur">00:04:12</span>
+          </div>
         </div>
       </div>
     </div>
@@ -700,7 +727,8 @@
   <div class="wrap">
     <div class="sec-head reveal">
       <span class="eyebrow" data-i="whoEyebrow"></span>
-      <h2 data-i="whoH2"></h2>
+      <!-- <h2 data-i="whoH2"></h2> -->
+       <h2 data-i="whoH2" style="white-space: nowrap;"></h2>
     </div>
     <div class="uses reveal">
       <div class="use"><div class="uh"><span class="ui"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><path d="M3 11l18-8-8 18-2-8z"/></svg></span><b data-i="u1h"></b></div><p data-i="u1p"></p></div>
@@ -836,41 +864,41 @@ var I18N = {
     stat2:"ქართული მედია-წყარო მონიტორინგისთვის",
     stat3:"უწყვეტი მონიტორინგი ყველა არხზე",
     stat4:"ავტომატური რეპორტები — ხელით მუშაობის გარეშე",
-    ovEyebrow:"სამი ფუნქცია", ovH2:"ერთ სივრცეში — მედიის სრული სურათი",
+    ovEyebrow:"სამი ფუნქცია", ovH2:"მედიის სრული ხედვა — ერთ პლატფორმაზე.",
     ovLead:"სამი დამოუკიდებელი ფუნქცია, რომლებიც ერთად გაძლევთ მედიის სრულ სურათს — რას წერენ მედიაში, რას აჩვენებს ანალიტიკა და რა ითქვა ეთერში.",
     ovGo:"გადასვლა",
     ov1h:"საკვანძო ძიება", ov1p:"იპოვეთ ყველა ნახსენები მედიაში, სოციალურ ქსელებსა და ბლოგებში — რელევანტურობისა და სენტიმენტის ავტომატური შეფასებით.",
     ov2h:"ანალიტიკური რეპორტები", ov2p:"მედია-წყაროების ავტომატური მონიტორინგი და მზა ანალიტიკური რეპორტები PDF ან DOCX ფორმატში.",
     ov3h:"ტელემონიტორინგი", ov3p:"ეთერისა და სტრიმების ავტომატური ტრანსკრიფცია საკვანძო სიტყვების აღმოჩენითა და სპიკერების გარჩევით.",
-    f1badge:"საკვანძო ძიება", f1h2:"იპოვეთ ყველა ნახსენები მედიასა და სოციალურ ქსელებში",
+    f1badge:"საკვანძო ძიება", f1h2:"მოიძიეთ საკვანძო სიტყვები ყველა მედიასა და სოციალურ ქსელში.",
     f1lead:"შეიყვანეთ ბრენდი, პიროვნება ან თემა — სისტემა ავტომატურად სკანირებს ონლაინ მედიას, სოციალურ ქსელებსა და ბლოგებს, პოულობს ყველა ნახსენებს, ამოწმებს მის რელევანტურობას და განსაზღვრავს სენტიმენტს.",
-    f1b1:"რელევანტურობის ფილტრი", f1e1:"AI განსაზღვრავს, ეხება თუ არა ნახსენები თქვენს კომპანიას, დარგს თუ საერთოდ არ არის რელევანტური — ზედმეტი ინფორმაციული ხმაური ავტომატურად იფილტრება.",
-    f1b2:"სენტიმენტი ქართულად", f1e2:"თითოეულ ნახსენებს ავტომატურად ენიჭება დადებითი, ნეიტრალური ან უარყოფითი სენტიმენტი — ქართული ენის სრული მხარდაჭერით.",
-    f1b3:"ისტორია და დაგეგმვა", f1e3:"ყველა ძიება ინახება ისტორიაში; შესაძლებელია ყოველდღიური ან კვირეული ავტომატური ძიების დაგეგმვა.",
-    f1b4:"Alert ზღვარზე", f1e4:"დააწესეთ ზღვარი — მაგალითად, 1 საათში 10-ზე მეტი უარყოფითი ნახსენების შემთხვევაში სისტემა მყისიერ შეტყობინებას გამოგიგზავნით.",
-    f1b5:"DOCX ელფოსტაზე", f1e5:"დასრულებული ძიების შედეგები ავტომატურად იგზავნება მითითებულ ელფოსტაზე DOCX დანართის სახით.",
+    f1b1:"რელევანტურობის ფილტრი", f1e1:"AI ფილტრავს ხმაურს და ტოვებს მხოლოდ თქვენთვის რელევანტურ ნახსენებებს.",
+    f1b2:"სენტიმენტი ქართულად", f1e2:"დადებითი, ნეიტრალური თუ უარყოფითი — ავტომატურად, ქართული ტექსტისთვისაც.",
+    f1b3:"ისტორია და დაგეგმვა", f1e3:"ყველა ძიება ინახება; დაგეგმეთ ავტომატური ყოველდღიური ან კვირეული ძიება.",
+    f1b4:"Alert ზღვარზე", f1e4:"მაგ. 1 საათში 10+ უარყოფითი ნახსენები — და მიიღებთ მყისიერ შეტყობინებას.",
+    f1b5:"DOCX ელფოსტაზე", f1e5:"შედეგები ავტომატურად იგზავნება DOCX დანართად მითითებულ ელფოსტაზე.",
     chipComp:"კონკურენტი X", smRun:"ძიება",
-    f2badge:"ანალიტიკური რეპორტები", f2h2:"ავტომატური რეპორტები მედია-სკრეპინგით",
+    f2badge:"ანალიტიკური რეპორტები", f2h2:"ავტომატური რეპორტები<br>მედია-სკრეპინგით",
     f2lead:"სისტემა უწყვეტ რეჟიმში აგროვებს ინფორმაციას 40-ზე მეტი ქართული მედია-წყაროდან და სოციალური ქსელებიდან, რის საფუძველზეც ავტომატურად ქმნის ანალიტიკურ რეპორტს — ხელით დამუშავების გარეშე.",
-    f2b1:"40+ წყაროს სკრეპინგი", f2e1:"წამყვანი ქართული საინფორმაციო საიტები და სოციალური ქსელები — ერთიან მონიტორინგში.",
-    f2b2:"მდიდარი ანალიტიკა", f2e2:"სენტიმენტის განაწილება, Share of Voice, პლატფორმების აქტივობა, თემების სიხშირე და კატეგორიები.",
-    f2b3:"კომპანიაზე მორგებული გრაფიკები", f2e3:"მზა გრაფიკები და ვიზუალიზაციები, მორგებული თქვენი კომპანიის მეტრიკებზე.",
-    f2b4:"AI შეჯამება + PDF/DOCX", f2e4:"AI-ის მიერ შექმნილი ტექსტური შეჯამება მთავარი ტენდენციებით და მზა ანგარიში PDF ან DOCX ფორმატში.",
+    f2b1:"40+ წყაროს სკრეპინგი", f2e1:"წამყვანი ქართული მედია და სოციალური ქსელები — ერთიან ნაკადში.",
+    f2b2:"მდიდარი ანალიტიკა", f2e2:"სენტიმენტი, Share of Voice, პლატფორმების აქტივობა, თემები და კატეგორიები.",
+    f2b3:"კომპანიაზე მორგებული გრაფიკები", f2e3:"მზა გრაფიკები, მორგებული თქვენი კომპანიის მეტრიკებზე.",
+    f2b4:"AI შეჯამება + PDF/DOCX", f2e4:"AI-შეჯამება მთავარი ტენდენციებით და მზა ანგარიში PDF ან DOCX-ში.",
     srcMore:"+ 30 სხვა",
     repTitle:"კვირეული რეპორტი", repSub:'01–07 ივლისი · „Aura"',
     repK1:"ნახსენები", repK2:"წყარო", repK3:"დინამიკა",
     repPos:"დადებითი", repNeu:"ნეიტრ.", repNeg:"უარყოფ.", repAI:"AI შეჯამება",
     repSum:"კვირის განმავლობაში ნახსენებების რაოდენობა 12%-ით გაიზარდა. საერთო სენტიმენტი დადებითია, თუმცა ხუთშაბათს აპლიკაციის შეფერხებებთან დაკავშირებული უარყოფითი სიგნალები მნიშვნელოვნად გაიზარდა.",
     ct1:"სენტიმენტის განაწილება", ct2:"Share of voice", ct3:"კატეგორიები", ct4:"თემების სიხშირე", ct5:"აქტივობა პლატფორმებზე", ct6:"ჩართულობა",
-    f3badge:"ტელემონიტორინგი", f3h2:"ეთერის ავტომატური ტრანსკრიფცია — რეალურ დროში",
+    f3badge:"ტელემონიტორინგი", f3h2:"ეთერის ავტომატური ტრანსკრიფცია<br>— რეალურ დროში",
     f3lead:"სისტემა რეალურ დროში ამუშავებს ტელეარხებსა და ონლაინ სტრიმებს, საუბარს ტექსტად გარდაქმნის და ავტომატურად პოულობს თქვენს საკვანძო სიტყვებს — აღარ დაგჭირდებათ ვიდეოების საათობით ხელით გადამოწმება.",
-    f3b1:"მეტყველება → ტექსტი", f3e1:"ეთერი ავტომატურად ტრანსკრიბირდება, ხოლო ტექსტი ჩნდება ჩაწერის მიმდინარეობისას.",
-    f3b2:"წყაროების მრავალფეროვნება", f3e2:"ტელეარხები, YouTube, Facebook და Parliament.ge — პირდაპირი ეთერი ან არქივი, კამერის არჩევის შესაძლებლობით.",
-    f3b3:"ქივორდების პროფილები", f3e3:"მორფოლოგიის, ტრანსლიტერაციისა და ძიების ლოგიკის მხარდაჭერა — მაქსიმალურად ზუსტი შედეგებისთვის ქართულ ტექსტში.",
-    f3b4:"სპიკერების გარჩევა", f3e4:"სისტემა ავტომატურად არჩევს სხვადასხვა სპიკერს — იდეალურია ინტერვიუებისა და პარლამენტის სხდომებისთვის.",
-    f3b5:"ტრანსკრიპტი და ანგარიში", f3e5:"ტრანსკრიპტი მონიშნული საკვანძო სიტყვებით, კოპირების და Word/PDF ფორმატში გადმოწერის შესაძლებლობით.",
+    f3b1:"მეტყველება → ტექსტი", f3e1:"ეთერი ავტომატურად ტრანსკრიბირდება ჩაწერის მიმდინარეობისას.",
+    f3b2:"წყაროების მრავალფეროვნება", f3e2:"ტელეარხები, YouTube, Facebook, Parliament.ge — ლაივი ან არქივი.",
+    f3b3:"ქივორდების პროფილები", f3e3:"მორფოლოგია, ტრანსლიტერაცია და ლოგიკა — ზუსტი ძიებისთვის ქართულში.",
+    f3b4:"სპიკერების გარჩევა", f3e4:"ავტომატურად არჩევს სპიკერებს — იდეალურია ინტერვიუებისა და სხდომებისთვის.",
+    f3b5:"ტრანსკრიპტი და ანგარიში", f3e5:"მონიშნული საკვანძო სიტყვები, კოპირება და Word/PDF გადმოწერა.",
     tvSrc:"TV · პირდაპირი ეთერი", tvFound:"ნაპოვნია: Aura ·",
-    whoEyebrow:"ვისთვის", whoH2:"შექმნილია მათთვის, ვისთვისაც ინფორმაციის კონტროლი მნიშვნელოვანია",
+    whoEyebrow:"ვისთვის", whoH2:"მათთვის, ვისთვისაც ინფორმაცია ძალაა.",
     u1h:"PR და კომუნიკაცია", u1p:"აკონტროლეთ თქვენი ბრენდის რეპუტაცია ტექსტსა და ეთერში, სანამ სიგნალი კრიზისად გადაიქცევა.",
     u2h:"მარკეტინგი და ბრენდი", u2p:"გაზომეთ კამპანიის ეფექტიანობა და მომხმარებლის განწყობა რეალურ დროში.",
     u3h:"სააგენტოები", u3p:"მართეთ რამდენიმე კლიენტის მონიტორინგი ერთდროულად და მიაწოდეთ მზა რეპორტები.",
@@ -878,11 +906,11 @@ var I18N = {
     u5h:"კრიზის-მენეჯმენტი", u5p:"დროულად აღმოაჩინეთ უარყოფითი ტენდენციები მედიასა და ეთერში, სანამ ისინი კრიზისად გადაიქცევა.",
     u6h:"საჯარო პირები", u6p:"აკონტროლეთ თქვენი სახელის ყველა ნახსენები ციფრულ და სამაუწყებლო წყაროებში.",
     adEyebrow:"MVP · თქვენზე მორგებული", adH2:"პლატფორმას თქვენს საჭიროებებზე ვარგებთ",
-    adLead:"MediaMonitoring AI ამჟამად MVP ეტაპზეა. თითოეულ კლიენტთან ერთად ვარგებთ წყაროებს, ქივორდების პროფილებსა და რეპორტების ფორმატს, რათა მიიღოთ არა სტანდარტული, არამედ თქვენს საჭიროებებზე მორგებული სისტემა.",
+    adLead:"MediaMonitoring AI ამჟამად MVP ეტაპზეა. თითოეულ კლიენტთან ერთად ვარგებთ წყაროებს, ქივორდებსა და რეპორტის ფორმატს — მიიღებთ არა შაბლონს, არამედ თქვენზე მორგებულ სისტემას.",
     ad1h:"წყაროებისა და არხების მორგება", ad1p:"შევარჩევთ იმ მედიას, სოციალურ გვერდებსა და ტელეარხებს, რომლებიც თქვენთვის მნიშვნელოვანია.",
     ad2h:"რეპორტის ფორმატი", ad2p:"თქვენი ბრენდბუქისა და მეტრიკების მიხედვით ვაწყობთ ანგარიშის შაბლონს.",
     ad3h:"ჩართვის მხარდაჭერა", ad3p:"დაყენებიდან პირველ რეპორტამდე გვერდში გიდგავართ.",
-    faqEyebrow:"ხშირი კითხვები", faqH2:"რაც ხშირად გვეკითხებიან",
+    faqEyebrow:"ხშირი კითხვები", faqH2:"ხშირად დასმული კითხვები",
     q1:"რა სამ ფუნქციას მოიცავს პლატფორმა?",
     a1:"სამ დამოუკიდებელ მიმართულებას: (1) საკვანძო ძიება — ნახსენებების ძებნა მედიაში, სოცქსელებსა და ბლოგებში სენტიმენტით; (2) ანალიტიკური რეპორტები — მედია-წყაროების სკრეპინგი და ავტომატური ანგარიში; (3) ტელემონიტორინგი — ეთერისა და სტრიმების ტექსტად გარდაქმნა და საკვანძო სიტყვების აღმოჩენა.",
     q2:"ქართულ ენას უჭერთ მხარს?",
@@ -933,18 +961,18 @@ var I18N = {
     ov3h:"TV monitoring", ov3p:"Broadcast and streams as text, with keyword detection and speaker separation.",
     f1badge:"Keyword search", f1h2:"Find every mention across media and social",
     f1lead:"Enter a brand, a person or a topic — the system scans online media, social networks and blogs, catches every mention, checks relevance and assigns sentiment.",
-    f1b1:"Relevance filter", f1e1:"AI decides whether a mention is about your company, your industry, or simply unrelated — so the noise is filtered out.",
-    f1b2:"Sentiment in Georgian", f1e2:"Every mention is scored positive / neutral / negative — with full support for Georgian text.",
-    f1b3:"History & scheduling", f1e3:"Every search is saved to history; you can schedule automatic daily or weekly searches.",
-    f1b4:"Threshold alerts", f1e4:"Set a threshold — e.g. more than 10 negative mentions in one hour → an instant notification.",
-    f1b5:"DOCX by email", f1e5:"Completed search results are sent automatically as a DOCX attachment to the address you set.",
+    f1b1:"Relevance filter", f1e1:"AI filters the noise and keeps only the mentions relevant to you.",
+    f1b2:"Sentiment in Georgian", f1e2:"Positive, neutral or negative — automatically, in Georgian too.",
+    f1b3:"History & scheduling", f1e3:"Every search is saved; schedule automatic daily or weekly runs.",
+    f1b4:"Threshold alerts", f1e4:"e.g. 10+ negative mentions in an hour — and you get an instant alert.",
+    f1b5:"DOCX by email", f1e5:"Results auto-sent as a DOCX attachment to the address you set.",
     chipComp:"Competitor X", smRun:"Search",
-    f2badge:"Analytical reports", f2h2:"Automatic reports from media scraping",
+    f2badge:"Analytical reports", f2h2:"Automatic reports from<br>media scraping",
     f2lead:"The system continuously collects material from 40+ Georgian media sources and social networks, then builds an analytical report automatically — with no manual work.",
-    f2b1:"40+ sources scraped", f2e1:"Leading Georgian news sites and social pages — in a single stream.",
-    f2b2:"Rich analytics", f2e2:"Sentiment distribution, share of voice, activity by platform, topic frequency and categories.",
-    f2b3:"Company-tailored charts", f2e3:"A ready chart set, tuned to a specific company's own metrics.",
-    f2b4:"AI summary + PDF/DOCX", f2e4:"A written takeaway of the main trends; a ready report to share in PDF or DOCX.",
+    f2b1:"40+ sources scraped", f2e1:"Leading Georgian media and social pages — in one stream.",
+    f2b2:"Rich analytics", f2e2:"Sentiment, share of voice, platform activity, topics and categories.",
+    f2b3:"Company-tailored charts", f2e3:"Ready charts, tuned to your company's own metrics.",
+    f2b4:"AI summary + PDF/DOCX", f2e4:"AI text summary of trends, plus a ready report in PDF or DOCX.",
     srcMore:"+ 30 more",
     repTitle:"Weekly report", repSub:'Jul 01–07 · "Aura"',
     repK1:"Mentions", repK2:"Sources", repK3:"Change",
@@ -953,13 +981,13 @@ var I18N = {
     ct1:"Sentiment distribution", ct2:"Share of voice", ct3:"Categories", ct4:"Topic frequency", ct5:"Activity by platform", ct6:"Engagement",
     f3badge:"TV monitoring", f3h2:"Broadcast as text — in real time",
     f3lead:"The system listens to TV channels and online streams, turns speech into text, and finds your keywords — so you never have to watch hours of video by hand.",
-    f3b1:"Speech → text", f3e1:"Broadcast is transcribed automatically; the transcript appears while recording is in progress.",
-    f3b2:"Many source types", f3e2:"TV channels, YouTube, Facebook and Parliament.ge — live or archive, with camera selection.",
-    f3b3:"Keyword profiles", f3e3:"Morphology, transliteration and logic modes — for precise matching in Georgian text.",
-    f3b4:"Speaker separation", f3e4:"The system distinguishes who is Speaker 1 and who is Speaker 2. Ideal for interviews and parliamentary sessions.",
-    f3b5:"Transcript & report", f3e5:"Text with highlighted keywords, copy, and Word/PDF download.",
+    f3b1:"Speech → text", f3e1:"Broadcast is transcribed automatically while recording runs.",
+    f3b2:"Many source types", f3e2:"TV, YouTube, Facebook, Parliament.ge — live or archive.",
+    f3b3:"Keyword profiles", f3e3:"Morphology, transliteration and logic — for precise Georgian search.",
+    f3b4:"Speaker separation", f3e4:"Separates speakers automatically — ideal for interviews and sessions.",
+    f3b5:"Transcript & report", f3e5:"Highlighted keywords, copy, and Word/PDF download.",
     tvSrc:"TV · live broadcast", tvFound:"Found: Aura ·",
-    whoEyebrow:"Who it's for", whoH2:"Built for people to whom words matter",
+    whoEyebrow:"Who it's for", whoH2:"For those who believe information is power.",
     u1h:"PR & communications", u1p:"Keep control of your brand's voice in text and on air, before a signal becomes a crisis.",
     u2h:"Marketing & brand", u2p:"Measure campaign impact and audience sentiment in real time.",
     u3h:"Agencies", u3p:"Run monitoring for several clients and hand over ready-made reports.",
@@ -967,7 +995,7 @@ var I18N = {
     u5h:"Crisis management", u5p:"Catch a negative wave in both press and broadcast, before it spreads.",
     u6h:"Public figures", u6p:"Monitor mentions of your own name across every digital and broadcast source.",
     adEyebrow:"MVP · tailored to you", adH2:"We tune the platform to exactly what you need",
-    adLead:"MediaMonitoring AI is currently at the MVP stage. With each client we shape the source set, keyword profiles and report format together — instead of a standard template, you get a system tailored to you.",
+    adLead:"MediaMonitoring AI is at the MVP stage. With each client we tune the sources, keyword profiles and report format — you get a system tailored to you, not a template.",
     ad1h:"Sources & channels tuned", ad1p:"We pick the media, social pages and TV channels that matter to you.",
     ad2h:"Report format", ad2p:"We build the report template around your brand book and metrics.",
     ad3h:"Onboarding support", ad3p:"We're beside you from setup through the first report.",
