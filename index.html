@@ -41,7 +41,7 @@
     --maxw:1160px;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
+  html{scroll-behavior:smooth;overflow-x:hidden}
   [id]{scroll-margin-top:86px}
   h1,h2,h3,p{overflow-wrap:break-word}
   img,svg{max-width:100%}
@@ -113,7 +113,7 @@
     background:rgba(10,12,18,.72);border-bottom:1px solid transparent;transition:border-color .3s, background .3s}
   header.nav.scrolled{border-bottom-color:var(--line);background:rgba(10,12,18,.9)}
   .nav-inner{display:flex;align-items:center;justify-content:space-between;height:68px;gap:16px}
-  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1rem;color:var(--ink);flex:none}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1rem;color:var(--ink);flex:none;min-width:0}
   .brand .logo{width:32px;height:32px;flex:none;border-radius:9px;display:block;
     box-shadow:0 0 0 1px rgba(255,255,255,.06), 0 6px 16px -8px rgba(139,92,246,.6)}
   .nav-links{display:flex;align-items:center;gap:26px}
@@ -447,6 +447,9 @@
     .rsent .rsrow .bar i{transition:none}.report .rhead::after{transition:none}
   }
 
+  /* keep the "who" heading on one line only where there's room */
+  @media (min-width:720px){ #who .sec-head h2{white-space:nowrap} }
+
   @media (max-width:960px){
     .nav-links{display:none}.hamburger{display:flex}
     .hero-grid{grid-template-columns:1fr;gap:38px}.feed{max-width:540px}
@@ -466,6 +469,13 @@
     .stats .wrap{grid-template-columns:1fr 1fr;gap:20px}
     .uses{grid-template-columns:1fr}
     .foot-grid{grid-template-columns:1fr 1fr}
+  }
+  @media (max-width:400px){
+    .brand span{font-size:.82rem}
+    .brand .logo{width:28px;height:28px}
+  }
+  @media (max-width:360px){
+    .rstat{grid-template-columns:1fr 1fr}
   }
 </style>
 </head>
@@ -727,8 +737,7 @@
   <div class="wrap">
     <div class="sec-head reveal">
       <span class="eyebrow" data-i="whoEyebrow"></span>
-      <!-- <h2 data-i="whoH2"></h2> -->
-       <h2 data-i="whoH2" style="white-space: nowrap;"></h2>
+      <h2 data-i="whoH2"></h2>
     </div>
     <div class="uses reveal">
       <div class="use"><div class="uh"><span class="ui"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><path d="M3 11l18-8-8 18-2-8z"/></svg></span><b data-i="u1h"></b></div><p data-i="u1p"></p></div>
@@ -854,181 +863,446 @@ var I18N = {
   ka:{
     nav1:"საკვანძო ძიება", nav2:"ანალიტიკური რეპორტები", nav3:"ტელემონიტორინგი", navDemo:"დემოს მოთხოვნა",
     heroEyebrow:"AI-ზე დაფუძნებული მედია ინტელექტი",
-    heroH1:'მედია, სოციალური ქსელები და ეთერი — <span class="hl">ერთ პლატფორმაზე</span>.',
-    heroLead:"MediaMonitoring AI აკონტროლებს ონლაინ მედიას, სოციალურ ქსელებსა და ბლოგებს თქვენი საკვანძო სიტყვების მიხედვით, თითოეულ ნახსენებს ავტომატურად ანიჭებს სენტიმენტს, ქმნის ანალიტიკურ რეპორტებს და ტელეეთერს ტექსტად გარდაქმნის — ქართული ენის სრული მხარდაჭერით.",
+    heroH1:'მედია, სოციალური ქსელები და ეთერი <span class="hl">ერთ პლატფორმაზე</span>.',
+    heroLead:"MediaMonitoring AI აკონტროლებს ონლაინ მედიას, სოციალურ ქსელებსა და ბლოგებს თქვენი საკვანძო სიტყვების მიხედვით, თითოეულ ნახსენებს ავტომატურად ანიჭებს სენტიმენტს, ქმნის ანალიტიკურ რეპორტებს და ტელეეთერს ტექსტად გარდაქმნის. ქართული ენის სრული მხარდაჭერით.",
     heroBtn2:"გაიცანით სამივე ფუნქცია",
     trust1:"ქართული NLP", trust2:"მეტყველება → ტექსტი", trust3:"PDF / DOCX რეპორტი",
     feedTitle:'ცოცხალი ნაკადი · „Aura"', feedCountLbl:"დღევანდელი ნახსენებები", feedLive:"ცოცხალი", feedSentLbl:"სენტიმენტი",
     alertHead:"გადაჭარბებულია ზღვარი",
-    stat1:"ძირითადი ფუნქციები — ძიება · რეპორტები · ტელემონიტორინგი",
+    stat1:"ძირითადი ფუნქციები: ძიება · რეპორტები · ტელემონიტორინგი",
     stat2:"ქართული მედია-წყარო მონიტორინგისთვის",
     stat3:"უწყვეტი მონიტორინგი ყველა არხზე",
-    stat4:"ავტომატური რეპორტები — ხელით მუშაობის გარეშე",
-    ovEyebrow:"სამი ფუნქცია", ovH2:"მედიის სრული ხედვა — ერთ პლატფორმაზე.",
-    ovLead:"სამი დამოუკიდებელი ფუნქცია, რომლებიც ერთად გაძლევთ მედიის სრულ სურათს — რას წერენ მედიაში, რას აჩვენებს ანალიტიკა და რა ითქვა ეთერში.",
+    stat4:"ავტომატური რეპორტები ხელით მუშაობის გარეშე",
+
+    ovEyebrow:"სამი ფუნქცია",
+    ovH2:"მედიის სრული ხედვა ერთ პლატფორმაზე.",
+    ovLead:"სამი დამოუკიდებელი ფუნქცია, რომლებიც ერთად გაძლევთ მედიის სრულ სურათს. ნახავთ რას წერენ მედიაში, რას აჩვენებს ანალიტიკა და რა ითქვა ეთერში.",
     ovGo:"გადასვლა",
-    ov1h:"საკვანძო ძიება", ov1p:"იპოვეთ ყველა ნახსენები მედიაში, სოციალურ ქსელებსა და ბლოგებში — რელევანტურობისა და სენტიმენტის ავტომატური შეფასებით.",
-    ov2h:"ანალიტიკური რეპორტები", ov2p:"მედია-წყაროების ავტომატური მონიტორინგი და მზა ანალიტიკური რეპორტები PDF ან DOCX ფორმატში.",
-    ov3h:"ტელემონიტორინგი", ov3p:"ეთერისა და სტრიმების ავტომატური ტრანსკრიფცია საკვანძო სიტყვების აღმოჩენითა და სპიკერების გარჩევით.",
-    f1badge:"საკვანძო ძიება", f1h2:"მოიძიეთ საკვანძო სიტყვები ყველა მედიასა და სოციალურ ქსელში.",
-    f1lead:"შეიყვანეთ ბრენდი, პიროვნება ან თემა — სისტემა ავტომატურად სკანირებს ონლაინ მედიას, სოციალურ ქსელებსა და ბლოგებს, პოულობს ყველა ნახსენებს, ამოწმებს მის რელევანტურობას და განსაზღვრავს სენტიმენტს.",
-    f1b1:"რელევანტურობის ფილტრი", f1e1:"AI ფილტრავს ხმაურს და ტოვებს მხოლოდ თქვენთვის რელევანტურ ნახსენებებს.",
-    f1b2:"სენტიმენტი ქართულად", f1e2:"დადებითი, ნეიტრალური თუ უარყოფითი — ავტომატურად, ქართული ტექსტისთვისაც.",
-    f1b3:"ისტორია და დაგეგმვა", f1e3:"ყველა ძიება ინახება; დაგეგმეთ ავტომატური ყოველდღიური ან კვირეული ძიება.",
-    f1b4:"Alert ზღვარზე", f1e4:"მაგ. 1 საათში 10+ უარყოფითი ნახსენები — და მიიღებთ მყისიერ შეტყობინებას.",
-    f1b5:"DOCX ელფოსტაზე", f1e5:"შედეგები ავტომატურად იგზავნება DOCX დანართად მითითებულ ელფოსტაზე.",
-    chipComp:"კონკურენტი X", smRun:"ძიება",
-    f2badge:"ანალიტიკური რეპორტები", f2h2:"ავტომატური რეპორტები<br>მედია-სკრეპინგით",
-    f2lead:"სისტემა უწყვეტ რეჟიმში აგროვებს ინფორმაციას 40-ზე მეტი ქართული მედია-წყაროდან და სოციალური ქსელებიდან, რის საფუძველზეც ავტომატურად ქმნის ანალიტიკურ რეპორტს — ხელით დამუშავების გარეშე.",
-    f2b1:"40+ წყაროს სკრეპინგი", f2e1:"წამყვანი ქართული მედია და სოციალური ქსელები — ერთიან ნაკადში.",
-    f2b2:"მდიდარი ანალიტიკა", f2e2:"სენტიმენტი, Share of Voice, პლატფორმების აქტივობა, თემები და კატეგორიები.",
-    f2b3:"კომპანიაზე მორგებული გრაფიკები", f2e3:"მზა გრაფიკები, მორგებული თქვენი კომპანიის მეტრიკებზე.",
-    f2b4:"AI შეჯამება + PDF/DOCX", f2e4:"AI-შეჯამება მთავარი ტენდენციებით და მზა ანგარიში PDF ან DOCX-ში.",
+
+    ov1h:"საკვანძო ძიება",
+    ov1p:"იპოვეთ ყველა ნახსენები მედიაში, სოციალურ ქსელებსა და ბლოგებში. სისტემა ავტომატურად აფასებს რელევანტურობასა და სენტიმენტს.",
+
+    ov2h:"ანალიტიკური რეპორტები",
+    ov2p:"მედია-წყაროების ავტომატური მონიტორინგი და მზა ანალიტიკური რეპორტები PDF ან DOCX ფორმატში.",
+
+    ov3h:"ტელემონიტორინგი",
+    ov3p:"ეთერისა და სტრიმების ავტომატური ტრანსკრიფცია საკვანძო სიტყვების აღმოჩენითა და სპიკერების გარჩევით.",
+
+    f1badge:"საკვანძო ძიება",
+    f1h2:"მოიძიეთ საკვანძო სიტყვები ყველა მედიასა და სოციალურ ქსელში.",
+    f1lead:"შეიყვანეთ ბრენდი, პიროვნება ან თემა. სისტემა ავტომატურად სკანირებს ონლაინ მედიას, სოციალურ ქსელებსა და ბლოგებს, პოულობს ყველა ნახსენებს, ამოწმებს მის რელევანტურობას და განსაზღვრავს სენტიმენტს.",
+
+    f1b1:"რელევანტურობის ფილტრი",
+    f1e1:"AI ფილტრავს ხმაურს და ტოვებს მხოლოდ თქვენთვის რელევანტურ ნახსენებებს.",
+
+    f1b2:"სენტიმენტი ქართულად",
+    f1e2:"დადებითი, ნეიტრალური თუ უარყოფითი. ავტომატურად, ქართული ტექსტისთვისაც.",
+
+    f1b3:"ისტორია და დაგეგმვა",
+    f1e3:"ყველა ძიება ინახება; დაგეგმეთ ავტომატური ყოველდღიური ან კვირეული ძიება.",
+
+    f1b4:"Alert ზღვარზე",
+    f1e4:"მაგალითად, 1 საათში 10-ზე მეტი უარყოფითი ნახსენები. მიიღებთ მყისიერ შეტყობინებას.",
+
+    f1b5:"DOCX ელფოსტაზე",
+    f1e5:"შედეგები ავტომატურად იგზავნება DOCX დანართად მითითებულ ელფოსტაზე.",
+
+    chipComp:"კონკურენტი X",
+    smRun:"ძიება",
+        f2badge:"ანალიტიკური რეპორტები",
+    f2h2:"ავტომატური რეპორტები<br>მედია-სკრეპინგით",
+    f2lead:"სისტემა უწყვეტ რეჟიმში აგროვებს ინფორმაციას 40-ზე მეტი ქართული მედია-წყაროდან და სოციალური ქსელებიდან. ამის საფუძველზე ავტომატურად ქმნის ანალიტიკურ რეპორტს, ხელით დამუშავების გარეშე.",
+
+    f2b1:"40+ წყაროს სკრეპინგი",
+    f2e1:"წამყვანი ქართული მედია და სოციალური ქსელები ერთიან ნაკადში.",
+
+    f2b2:"მდიდარი ანალიტიკა",
+    f2e2:"სენტიმენტი, Share of Voice, პლატფორმების აქტივობა, თემები და კატეგორიები.",
+
+    f2b3:"კომპანიაზე მორგებული გრაფიკები",
+    f2e3:"მზა გრაფიკები, მორგებული თქვენი კომპანიის მეტრიკებზე.",
+
+    f2b4:"AI შეჯამება + PDF/DOCX",
+    f2e4:"AI-ის შეჯამება მთავარი ტენდენციებით და მზა ანგარიში PDF ან DOCX ფორმატში.",
+
     srcMore:"+ 30 სხვა",
-    repTitle:"კვირეული რეპორტი", repSub:'01–07 ივლისი · „Aura"',
-    repK1:"ნახსენები", repK2:"წყარო", repK3:"დინამიკა",
-    repPos:"დადებითი", repNeu:"ნეიტრ.", repNeg:"უარყოფ.", repAI:"AI შეჯამება",
+
+    repTitle:"კვირეული რეპორტი",
+    repSub:'01–07 ივლისი · „Aura"',
+    repK1:"ნახსენები",
+    repK2:"წყარო",
+    repK3:"დინამიკა",
+    repPos:"დადებითი",
+    repNeu:"ნეიტრ.",
+    repNeg:"უარყოფ.",
+    repAI:"AI შეჯამება",
+
     repSum:"კვირის განმავლობაში ნახსენებების რაოდენობა 12%-ით გაიზარდა. საერთო სენტიმენტი დადებითია, თუმცა ხუთშაბათს აპლიკაციის შეფერხებებთან დაკავშირებული უარყოფითი სიგნალები მნიშვნელოვნად გაიზარდა.",
-    ct1:"სენტიმენტის განაწილება", ct2:"Share of voice", ct3:"კატეგორიები", ct4:"თემების სიხშირე", ct5:"აქტივობა პლატფორმებზე", ct6:"ჩართულობა",
-    f3badge:"ტელემონიტორინგი", f3h2:"ეთერის ავტომატური ტრანსკრიფცია<br>— რეალურ დროში",
-    f3lead:"სისტემა რეალურ დროში ამუშავებს ტელეარხებსა და ონლაინ სტრიმებს, საუბარს ტექსტად გარდაქმნის და ავტომატურად პოულობს თქვენს საკვანძო სიტყვებს — აღარ დაგჭირდებათ ვიდეოების საათობით ხელით გადამოწმება.",
-    f3b1:"მეტყველება → ტექსტი", f3e1:"ეთერი ავტომატურად ტრანსკრიბირდება ჩაწერის მიმდინარეობისას.",
-    f3b2:"წყაროების მრავალფეროვნება", f3e2:"ტელეარხები, YouTube, Facebook, Parliament.ge — ლაივი ან არქივი.",
-    f3b3:"ქივორდების პროფილები", f3e3:"მორფოლოგია, ტრანსლიტერაცია და ლოგიკა — ზუსტი ძიებისთვის ქართულში.",
-    f3b4:"სპიკერების გარჩევა", f3e4:"ავტომატურად არჩევს სპიკერებს — იდეალურია ინტერვიუებისა და სხდომებისთვის.",
-    f3b5:"ტრანსკრიპტი და ანგარიში", f3e5:"მონიშნული საკვანძო სიტყვები, კოპირება და Word/PDF გადმოწერა.",
-    tvSrc:"TV · პირდაპირი ეთერი", tvFound:"ნაპოვნია: Aura ·",
-    whoEyebrow:"ვისთვის", whoH2:"მათთვის, ვისთვისაც ინფორმაცია ძალაა.",
-    u1h:"PR და კომუნიკაცია", u1p:"აკონტროლეთ თქვენი ბრენდის რეპუტაცია ტექსტსა და ეთერში, სანამ სიგნალი კრიზისად გადაიქცევა.",
-    u2h:"მარკეტინგი და ბრენდი", u2p:"გაზომეთ კამპანიის ეფექტიანობა და მომხმარებლის განწყობა რეალურ დროში.",
-    u3h:"სააგენტოები", u3p:"მართეთ რამდენიმე კლიენტის მონიტორინგი ერთდროულად და მიაწოდეთ მზა რეპორტები.",
-    u4h:"საჯარო სექტორი", u4p:"თვალი ადევნეთ საზოგადოებრივ განწყობასა და პარლამენტის სხდომებს.",
-    u5h:"კრიზის-მენეჯმენტი", u5p:"დროულად აღმოაჩინეთ უარყოფითი ტენდენციები მედიასა და ეთერში, სანამ ისინი კრიზისად გადაიქცევა.",
-    u6h:"საჯარო პირები", u6p:"აკონტროლეთ თქვენი სახელის ყველა ნახსენები ციფრულ და სამაუწყებლო წყაროებში.",
-    adEyebrow:"MVP · თქვენზე მორგებული", adH2:"პლატფორმას თქვენს საჭიროებებზე ვარგებთ",
-    adLead:"MediaMonitoring AI ამჟამად MVP ეტაპზეა. თითოეულ კლიენტთან ერთად ვარგებთ წყაროებს, ქივორდებსა და რეპორტის ფორმატს — მიიღებთ არა შაბლონს, არამედ თქვენზე მორგებულ სისტემას.",
-    ad1h:"წყაროებისა და არხების მორგება", ad1p:"შევარჩევთ იმ მედიას, სოციალურ გვერდებსა და ტელეარხებს, რომლებიც თქვენთვის მნიშვნელოვანია.",
-    ad2h:"რეპორტის ფორმატი", ad2p:"თქვენი ბრენდბუქისა და მეტრიკების მიხედვით ვაწყობთ ანგარიშის შაბლონს.",
-    ad3h:"ჩართვის მხარდაჭერა", ad3p:"დაყენებიდან პირველ რეპორტამდე გვერდში გიდგავართ.",
-    faqEyebrow:"ხშირი კითხვები", faqH2:"ხშირად დასმული კითხვები",
+
+    ct1:"სენტიმენტის განაწილება",
+    ct2:"Share of voice",
+    ct3:"კატეგორიები",
+    ct4:"თემების სიხშირე",
+    ct5:"აქტივობა პლატფორმებზე",
+    ct6:"ჩართულობა",
+
+    f3badge:"ტელემონიტორინგი",
+    f3h2:"ეთერის ავტომატური ტრანსკრიფცია<br>რეალურ დროში",
+
+    f3lead:"სისტემა რეალურ დროში ამუშავებს ტელეარხებსა და ონლაინ სტრიმებს. საუბარს ტექსტად გარდაქმნის და ავტომატურად პოულობს თქვენს საკვანძო სიტყვებს. აღარ დაგჭირდებათ ვიდეოების საათობით ხელით გადამოწმება.",
+
+    f3b1:"მეტყველება → ტექსტი",
+    f3e1:"ეთერი ავტომატურად ტრანსკრიბირდება ჩაწერის მიმდინარეობისას.",
+
+    f3b2:"წყაროების მრავალფეროვნება",
+    f3e2:"ტელეარხები, YouTube, Facebook და Parliament.ge (ლაივი ან არქივი).",
+
+    f3b3:"ქივორდების პროფილები",
+    f3e3:"მორფოლოგია, ტრანსლიტერაცია და ლოგიკა ზუსტი ძიებისთვის ქართულში.",
+
+    f3b4:"სპიკერების გარჩევა",
+    f3e4:"ავტომატურად არჩევს სპიკერებს. იდეალურია ინტერვიუებისა და სხდომებისთვის.",
+
+    f3b5:"ტრანსკრიპტი და ანგარიში",
+    f3e5:"მონიშნული საკვანძო სიტყვები, კოპირება და Word/PDF გადმოწერა.",
+
+    tvSrc:"TV · პირდაპირი ეთერი",
+    tvFound:"ნაპოვნია: Aura ·",
+
+    whoEyebrow:"ვისთვის",
+    whoH2:"მათთვის, ვისთვისაც ინფორმაცია ძალაა.",
+
+    u1h:"PR და კომუნიკაცია",
+    u1p:"აკონტროლეთ თქვენი ბრენდის რეპუტაცია ტექსტსა და ეთერში, სანამ სიგნალი კრიზისად გადაიქცევა.",
+
+    u2h:"მარკეტინგი და ბრენდი",
+    u2p:"გაზომეთ კამპანიის ეფექტიანობა და მომხმარებლის განწყობა რეალურ დროში.",
+
+    u3h:"სააგენტოები",
+    u3p:"მართეთ რამდენიმე კლიენტის მონიტორინგი ერთდროულად და მიაწოდეთ მზა რეპორტები.",
+
+    u4h:"საჯარო სექტორი",
+    u4p:"თვალი ადევნეთ საზოგადოებრივ განწყობასა და პარლამენტის სხდომებს.",
+
+    u5h:"კრიზის-მენეჯმენტი",
+    u5p:"დროულად აღმოაჩინეთ უარყოფითი ტენდენციები მედიასა და ეთერში, სანამ ისინი კრიზისად გადაიქცევა.",
+
+    u6h:"საჯარო პირები",
+    u6p:"აკონტროლეთ თქვენი სახელის ყველა ნახსენები ციფრულ და სამაუწყებლო წყაროებში.",
+        adEyebrow:"MVP · თქვენზე მორგებული",
+    adH2:"პლატფორმას თქვენს საჭიროებებზე ვარგებთ",
+
+    adLead:"MediaMonitoring AI ამჟამად MVP ეტაპზეა. თითოეულ კლიენტთან ერთად ვარგებთ წყაროებს, ქივორდებსა და რეპორტის ფორმატს. მიიღებთ არა შაბლონს, არამედ თქვენს საჭიროებებზე მორგებულ სისტემას.",
+
+    ad1h:"წყაროებისა და არხების მორგება",
+    ad1p:"შევარჩევთ იმ მედიას, სოციალურ გვერდებსა და ტელეარხებს, რომლებიც თქვენთვის მნიშვნელოვანია.",
+
+    ad2h:"რეპორტის ფორმატი",
+    ad2p:"თქვენი ბრენდბუქისა და მეტრიკების მიხედვით ვაწყობთ ანგარიშის შაბლონს.",
+
+    ad3h:"ჩართვის მხარდაჭერა",
+    ad3p:"დაყენებიდან პირველ რეპორტამდე გვერდში გიდგავართ.",
+
+    faqEyebrow:"ხშირი კითხვები",
+    faqH2:"ხშირად დასმული კითხვები",
+
     q1:"რა სამ ფუნქციას მოიცავს პლატფორმა?",
+
     a1:"სამ დამოუკიდებელ მიმართულებას: (1) საკვანძო ძიება — ნახსენებების ძებნა მედიაში, სოცქსელებსა და ბლოგებში სენტიმენტით; (2) ანალიტიკური რეპორტები — მედია-წყაროების სკრეპინგი და ავტომატური ანგარიში; (3) ტელემონიტორინგი — ეთერისა და სტრიმების ტექსტად გარდაქმნა და საკვანძო სიტყვების აღმოჩენა.",
+
     q2:"ქართულ ენას უჭერთ მხარს?",
-    a2:"დიახ. სისტემა ქართულს სრულად უჭერს მხარს — ნახსენების ამოცნობა და სენტიმენტის ანალიზი (დადებითი / უარყოფითი / ნეიტრალური) ქართულ ტექსტზე მუშაობს, ხოლო ტელემონიტორინგში ქართული მეტყველება ტექსტად გარდაიქმნება.",
+
+    a2:"დიახ. სისტემა ქართულს სრულად უჭერს მხარს. ნახსენებების ამოცნობა და სენტიმენტის ანალიზი (დადებითი / უარყოფითი / ნეიტრალური) ქართულ ტექსტზე მუშაობს, ხოლო ტელემონიტორინგში ქართული მეტყველება ტექსტად გარდაიქმნება.",
+
     q3:"რომელ წყაროებს აკონტროლებთ?",
+
     a3:"ტექსტური ძიება და რეპორტები ფარავს 40+ ქართულ ონლაინ მედიას, სოციალურ ქსელებსა და ბლოგებს. ტელემონიტორინგი მოიცავს ტელეარხებს, YouTube-ს, Facebook-სა და Parliament.ge-ს. MVP სტადიაში წყაროების ზუსტ ნაკრებს თქვენთან ერთად ვაყალიბებთ.",
+
     q4:"რა ფორმატში მოდის რეპორტი?",
+
     a4:"PDF ან DOCX. შეგიძლიათ აირჩიოთ ყოველდღიური, კვირეული ან კამპანიური პერიოდი. ანგარიში მოიცავს ნახსენებების სტატისტიკას, სენტიმენტის განაწილებას, გავლენიან წყაროებსა და AI-ის ტექსტურ შეჯამებას. ტელემონიტორინგის ტრანსკრიპტიც გადმოიწერება Word ან PDF ფაილად.",
+
     q5:"როგორ მუშაობს ტელემონიტორინგი?",
+
     a5:"ირჩევთ წყაროს (ტელეარხი, YouTube, Facebook ან Parliament.ge), იწყებთ ჩაწერას ან გეგმავთ მას. სისტემა უსმენს ეთერს, საუბარს ტექსტად აქცევს და ავტომატურად ეძებს არჩეული ქივორდების პროფილის სიტყვებს. დასრულების შემდეგ ჩანაწერი ინახება ისტორიაში სპიკერების გარჩევითა და მონიშნული ქივორდებით.",
+
     q6:"MVP რას ნიშნავს ჩემთვის?",
+
     a6:"პროდუქტი ადრეულ სტადიაშია და ყოველ კლიენტთან ინდივიდუალურად ვაწყობთ წყაროებს, ქივორდებსა და რეპორტის ფორმატს. ეს არის შესაძლებლობა, მიიღოთ თქვენზე ზუსტად მორგებული სისტემა და გავლენა მოახდინოთ მის განვითარებაზე.",
-    ctaEyebrow:"დემოს მოთხოვნა", ctaH2:"დაიწყეთ თქვენი ბრენდის მონიტორინგი",
+
+    ctaEyebrow:"დემოს მოთხოვნა",
+    ctaH2:"დაიწყეთ თქვენი ბრენდის მონიტორინგი",
+
     ctaP:"დაგვიტოვეთ თქვენი მონაცემები და დაგიკავშირდებით, რათა ერთად შევარჩიოთ თქვენთვის მნიშვნელოვანი წყაროები, არხები და რეპორტის ფორმატი.",
-    ctaPt1:"თქვენს წყაროებზე მორგებული დაყენება", ctaPt2:"ცოცხალი დემო რეალურ ნახსენებებზე და ეთერზე", ctaPt3:"პასუხი 1 სამუშაო დღეში",
-    fName:"სახელი და გვარი", phName:"თქვენი სახელი", eName:"შეავსეთ სახელი",
-    fEmail:"სამუშაო ელ-ფოსტა", eEmail:"შეიყვანეთ სწორი ელ-ფოსტა",
-    fCompany:"კომპანია / ორგანიზაცია", phCompany:"კომპანიის სახელი", eCompany:"შეავსეთ კომპანია",
-    fKw:"ბრენდები ან საკვანძო სიტყვები", phKw:"მაგ. Aura, კონკურენტი X",
-    fMsg:"შეტყობინება", phMsg:"რომელი ფუნქცია გაინტერესებთ — ძიება, რეპორტები თუ ტელემონიტორინგი? რა წყაროები?",
+
+    ctaPt1:"თქვენს წყაროებზე მორგებული დაყენება",
+    ctaPt2:"ცოცხალი დემო რეალურ ნახსენებებზე და ეთერზე",
+    ctaPt3:"პასუხი 1 სამუშაო დღეში",
+
+    fName:"სახელი და გვარი",
+    phName:"თქვენი სახელი",
+    eName:"შეავსეთ სახელი",
+
+    fEmail:"სამუშაო ელ-ფოსტა",
+    eEmail:"შეიყვანეთ სწორი ელ-ფოსტა",
+
+    fCompany:"კომპანია / ორგანიზაცია",
+    phCompany:"კომპანიის სახელი",
+    eCompany:"შეავსეთ კომპანია",
+
+    fKw:"ბრენდები ან საკვანძო სიტყვები",
+    phKw:"მაგ. Aura, კონკურენტი X",
+
+    fMsg:"შეტყობინება",
+    phMsg:"რომელი ფუნქცია გაინტერესებთ: ძიება, რეპორტები თუ ტელემონიტორინგი? რა წყაროები?",
+
     fSend:"დემოს მოთხოვნის გაგზავნა",
+
     fErr:"დაფიქსირდა შეცდომა. სცადეთ ხელახლა ან მოგვწერეთ ელ-ფოსტაზე.",
+
     fNote:"სპამს არ მოგწერთ. მონაცემები მხოლოდ დემოს დასაგეგმად გამოიყენება.",
-    okH:"მადლობა! მიღებულია.", okP:"თქვენი მოთხოვნა მივიღეთ. დაგიკავშირდებით 1 სამუშაო დღეში დემოს დასაგეგმად.",
-    footP:"AI-ზე დაფუძნებული მედია ინტელექტის პლატფორმა. მედია, სოციალური ქსელები და ეთერი — ერთ სივრცეში.",
-    footC1:"ფუნქციები", footC2:"კომპანია", footC3:"სამართლებრივი",
-    footAbout:"ჩვენ შესახებ", footBlog:"ბლოგი", footContact:"კონტაქტი", footPriv:"კონფიდენციალურობა", footTerms:"პირობები",
+
+    okH:"მადლობა! მიღებულია.",
+    okP:"თქვენი მოთხოვნა მივიღეთ. დაგიკავშირდებით 1 სამუშაო დღეში დემოს დასაგეგმად.",
+
+    footP:"AI-ზე დაფუძნებული მედია ინტელექტის პლატფორმა. მედია, სოციალური ქსელები და ეთერი ერთ სივრცეში.",
+
+    footC1:"ფუნქციები",
+    footC2:"კომპანია",
+    footC3:"სამართლებრივი",
+
+    footAbout:"ჩვენ შესახებ",
+    footBlog:"ბლოგი",
+    footContact:"კონტაქტი",
+    footPriv:"კონფიდენციალურობა",
+    footTerms:"პირობები",
+
     footCopy:"© 2026 MediaMonitoring AI. ყველა უფლება დაცულია."
-  },
+},
+
   en:{
     nav1:"Keyword search", nav2:"Analytical reports", nav3:"TV monitoring", navDemo:"Request a demo",
     heroEyebrow:"Media intelligence · AI",
-    heroH1:'One platform — <span class="hl">press, social & broadcast</span>.',
-    heroLead:"MediaMonitoring AI tracks online media, social networks and blogs for your keywords, scores every mention for sentiment, generates reports automatically, and turns live TV into searchable text — with full Georgian-language support.",
+    heroH1:'One platform: <span class="hl">press, social & broadcast</span>.',
+    heroLead:"MediaMonitoring AI tracks online media, social networks and blogs for your keywords, scores every mention for sentiment, generates reports automatically, and turns live TV into searchable text. Full Georgian-language support included.",
     heroBtn2:"See all three functions",
     trust1:"Georgian NLP", trust2:"Speech → text", trust3:"PDF / DOCX reports",
     feedTitle:'Live feed · "Aura"', feedCountLbl:"Mentions · today", feedLive:"live", feedSentLbl:"Sentiment",
     alertHead:"Threshold exceeded",
-    stat1:"Core functions — search · reports · TV monitoring",
+
+    stat1:"Core functions: search · reports · TV monitoring",
     stat2:"Georgian media sources for scraping",
     stat3:"Continuous monitoring across every source",
-    stat4:"Report formats — with zero manual work",
-    ovEyebrow:"Three functions", ovH2:"One place — the full media picture",
-    ovLead:"Three independent modules that work together: what's written in text, what analytics reveal, and what was said on air.",
+    stat4:"Report formats with zero manual work",
+
+    ovEyebrow:"Three functions",
+    ovH2:"The full media picture in one place",
+    ovLead:"Three independent modules that work together. See what's written in text, what analytics reveal, and what was said on air.",
     ovGo:"Open",
-    ov1h:"Keyword search", ov1p:"Find every mention across media, social and blogs — with relevance filtering and sentiment.",
-    ov2h:"Analytical reports", ov2p:"Automatic scraping of media sources, turned into a ready analytical report in PDF/DOCX.",
-    ov3h:"TV monitoring", ov3p:"Broadcast and streams as text, with keyword detection and speaker separation.",
-    f1badge:"Keyword search", f1h2:"Find every mention across media and social",
-    f1lead:"Enter a brand, a person or a topic — the system scans online media, social networks and blogs, catches every mention, checks relevance and assigns sentiment.",
-    f1b1:"Relevance filter", f1e1:"AI filters the noise and keeps only the mentions relevant to you.",
-    f1b2:"Sentiment in Georgian", f1e2:"Positive, neutral or negative — automatically, in Georgian too.",
-    f1b3:"History & scheduling", f1e3:"Every search is saved; schedule automatic daily or weekly runs.",
-    f1b4:"Threshold alerts", f1e4:"e.g. 10+ negative mentions in an hour — and you get an instant alert.",
-    f1b5:"DOCX by email", f1e5:"Results auto-sent as a DOCX attachment to the address you set.",
-    chipComp:"Competitor X", smRun:"Search",
-    f2badge:"Analytical reports", f2h2:"Automatic reports from<br>media scraping",
-    f2lead:"The system continuously collects material from 40+ Georgian media sources and social networks, then builds an analytical report automatically — with no manual work.",
-    f2b1:"40+ sources scraped", f2e1:"Leading Georgian media and social pages — in one stream.",
-    f2b2:"Rich analytics", f2e2:"Sentiment, share of voice, platform activity, topics and categories.",
-    f2b3:"Company-tailored charts", f2e3:"Ready charts, tuned to your company's own metrics.",
-    f2b4:"AI summary + PDF/DOCX", f2e4:"AI text summary of trends, plus a ready report in PDF or DOCX.",
+
+    ov1h:"Keyword search",
+    ov1p:"Find every mention across media, social and blogs. Includes relevance filtering and sentiment analysis.",
+
+    ov2h:"Analytical reports",
+    ov2p:"Automatic scraping of media sources, turned into ready analytical reports in PDF/DOCX format.",
+
+    ov3h:"TV monitoring",
+    ov3p:"Broadcast and streams converted into text with keyword detection and speaker separation.",
+
+    f1badge:"Keyword search",
+    f1h2:"Find every mention across media and social",
+
+    f1lead:"Enter a brand, a person or a topic. The system scans online media, social networks and blogs, catches every mention, checks relevance and assigns sentiment.",
+
+    f1b1:"Relevance filter",
+    f1e1:"AI filters the noise and keeps only the mentions relevant to you.",
+
+    f1b2:"Sentiment in Georgian",
+    f1e2:"Positive, neutral or negative. Automatically, in Georgian too.",
+
+    f1b3:"History & scheduling",
+    f1e3:"Every search is saved; schedule automatic daily or weekly runs.",
+
+    f1b4:"Threshold alerts",
+    f1e4:"For example, 10+ negative mentions in an hour. You get an instant alert.",
+
+    f1b5:"DOCX by email",
+    f1e5:"Results are automatically sent as a DOCX attachment to the address you set.",
+
+    chipComp:"Competitor X",
+    smRun:"Search",
+        f2badge:"Analytical reports",
+    f2h2:"Automatic reports from<br>media scraping",
+
+    f2lead:"The system continuously collects material from 40+ Georgian media sources and social networks, then automatically builds an analytical report without manual work.",
+
+    f2b1:"40+ sources scraped",
+    f2e1:"Leading Georgian media and social pages in one stream.",
+
+    f2b2:"Rich analytics",
+    f2e2:"Sentiment, share of voice, platform activity, topics and categories.",
+
+    f2b3:"Company-tailored charts",
+    f2e3:"Ready-made charts tuned to your company's own metrics.",
+
+    f2b4:"AI summary + PDF/DOCX",
+    f2e4:"AI text summary of trends, plus a ready report in PDF or DOCX.",
+
     srcMore:"+ 30 more",
-    repTitle:"Weekly report", repSub:'Jul 01–07 · "Aura"',
-    repK1:"Mentions", repK2:"Sources", repK3:"Change",
-    repPos:"Positive", repNeu:"Neutral", repNeg:"Negative", repAI:"AI summary",
+
+    repTitle:"Weekly report",
+    repSub:'Jul 01–07 · "Aura"',
+    repK1:"Mentions",
+    repK2:"Sources",
+    repK3:"Change",
+    repPos:"Positive",
+    repNeu:"Neutral",
+    repNeg:"Negative",
+    repAI:"AI summary",
+
     repSum:"Mentions grew 12% over the week. Positive tone dominates, though negative signals about app outages spiked on Thursday.",
-    ct1:"Sentiment distribution", ct2:"Share of voice", ct3:"Categories", ct4:"Topic frequency", ct5:"Activity by platform", ct6:"Engagement",
-    f3badge:"TV monitoring", f3h2:"Broadcast as text — in real time",
-    f3lead:"The system listens to TV channels and online streams, turns speech into text, and finds your keywords — so you never have to watch hours of video by hand.",
-    f3b1:"Speech → text", f3e1:"Broadcast is transcribed automatically while recording runs.",
-    f3b2:"Many source types", f3e2:"TV, YouTube, Facebook, Parliament.ge — live or archive.",
-    f3b3:"Keyword profiles", f3e3:"Morphology, transliteration and logic — for precise Georgian search.",
-    f3b4:"Speaker separation", f3e4:"Separates speakers automatically — ideal for interviews and sessions.",
-    f3b5:"Transcript & report", f3e5:"Highlighted keywords, copy, and Word/PDF download.",
-    tvSrc:"TV · live broadcast", tvFound:"Found: Aura ·",
-    whoEyebrow:"Who it's for", whoH2:"For those who believe information is power.",
-    u1h:"PR & communications", u1p:"Keep control of your brand's voice in text and on air, before a signal becomes a crisis.",
-    u2h:"Marketing & brand", u2p:"Measure campaign impact and audience sentiment in real time.",
-    u3h:"Agencies", u3p:"Run monitoring for several clients and hand over ready-made reports.",
-    u4h:"Public sector", u4p:"Track public sentiment and parliamentary sessions.",
-    u5h:"Crisis management", u5p:"Catch a negative wave in both press and broadcast, before it spreads.",
-    u6h:"Public figures", u6p:"Monitor mentions of your own name across every digital and broadcast source.",
-    adEyebrow:"MVP · tailored to you", adH2:"We tune the platform to exactly what you need",
-    adLead:"MediaMonitoring AI is at the MVP stage. With each client we tune the sources, keyword profiles and report format — you get a system tailored to you, not a template.",
-    ad1h:"Sources & channels tuned", ad1p:"We pick the media, social pages and TV channels that matter to you.",
-    ad2h:"Report format", ad2p:"We build the report template around your brand book and metrics.",
-    ad3h:"Onboarding support", ad3p:"We're beside you from setup through the first report.",
-    faqEyebrow:"FAQ", faqH2:"Questions we hear often",
+
+    ct1:"Sentiment distribution",
+    ct2:"Share of voice",
+    ct3:"Categories",
+    ct4:"Topic frequency",
+    ct5:"Activity by platform",
+    ct6:"Engagement",
+
+    f3badge:"TV monitoring",
+
+    f3h2:"Broadcast as text in real time",
+
+    f3lead:"The system listens to TV channels and online streams, turns speech into text, and finds your keywords. You never have to watch hours of video by hand.",
+
+    f3b1:"Speech → text",
+    f3e1:"Broadcast is transcribed automatically while recording runs.",
+
+    f3b2:"Many source types",
+    f3e2:"TV, YouTube, Facebook and Parliament.ge (live or archive).",
+
+    f3b3:"Keyword profiles",
+    f3e3:"Morphology, transliteration and logic for precise Georgian search.",
+
+    f3b4:"Speaker separation",
+    f3e4:"Separates speakers automatically. Ideal for interviews and sessions.",
+
+    f3b5:"Transcript & report",
+    f3e5:"Highlighted keywords, copy, and Word/PDF download.",
+
+    tvSrc:"TV · live broadcast",
+    tvFound:"Found: Aura ·",
+
+    whoEyebrow:"Who it's for",
+    whoH2:"For those who believe information is power.",
+
+    u1h:"PR & communications",
+    u1p:"Keep control of your brand's voice in text and on air, before a signal becomes a crisis.",
+
+    u2h:"Marketing & brand",
+    u2p:"Measure campaign impact and audience sentiment in real time.",
+
+    u3h:"Agencies",
+    u3p:"Run monitoring for several clients and hand over ready-made reports.",
+
+    u4h:"Public sector",
+    u4p:"Track public sentiment and parliamentary sessions.",
+
+    u5h:"Crisis management",
+    u5p:"Catch a negative wave in both press and broadcast before it spreads.",
+
+    u6h:"Public figures",
+    u6p:"Monitor mentions of your own name across every digital and broadcast source.",
+
+    adEyebrow:"MVP · tailored to you",
+    adH2:"We tune the platform to exactly what you need",
+
+    adLead:"MediaMonitoring AI is at the MVP stage. With each client, we tune the sources, keyword profiles and report format. You get a system tailored to you, not a template.",
+
+    ad1h:"Sources & channels tuned",
+    ad1p:"We pick the media, social pages and TV channels that matter to you.",
+
+    ad2h:"Report format",
+    ad2p:"We build the report template around your brand book and metrics.",
+
+    ad3h:"Onboarding support",
+    ad3p:"We're beside you from setup through the first report.",
+        faqEyebrow:"FAQ",
+    faqH2:"Questions we hear often",
+
     q1:"What three functions does the platform cover?",
-    a1:"Three independent modules: (1) keyword search — finding mentions across media, social and blogs with sentiment; (2) analytical reports — scraping media sources into an automatic report; (3) TV monitoring — turning broadcast and streams into text and detecting keywords.",
+
+    a1:"Three independent modules: (1) keyword search, finding mentions across media, social and blogs with sentiment analysis; (2) analytical reports, collecting media sources into automatic reports; (3) TV monitoring, turning broadcast and streams into text and detecting keywords.",
+
     q2:"Do you support Georgian?",
-    a2:"Yes. The system fully supports Georgian — mention detection and sentiment analysis (positive / negative / neutral) work on Georgian text, while TV monitoring converts Georgian speech into text.",
+
+    a2:"Yes. The system fully supports Georgian. Mention detection and sentiment analysis (positive / negative / neutral) work with Georgian text, while TV monitoring converts Georgian speech into text.",
+
     q3:"Which sources do you cover?",
-    a3:"Text search and reports cover 40+ Georgian online media, social networks and blogs. TV monitoring includes TV channels, YouTube, Facebook and Parliament.ge. At the MVP stage we shape the exact source set together with you.",
+
+    a3:"Text search and reports cover 40+ Georgian online media sources, social networks and blogs. TV monitoring includes TV channels, YouTube, Facebook and Parliament.ge. At the MVP stage, we define the exact source set together with you.",
+
     q4:"What format do reports come in?",
-    a4:"PDF or DOCX. You can choose a daily, weekly or campaign period. The report covers mention statistics, sentiment distribution, the most influential sources and an AI text summary. TV monitoring transcripts also download as Word or PDF.",
+
+    a4:"PDF or DOCX. You can choose a daily, weekly or campaign period. The report includes mention statistics, sentiment distribution, influential sources and an AI-generated text summary. TV monitoring transcripts can also be downloaded as Word or PDF.",
+
     q5:"How does TV monitoring work?",
-    a5:"You pick a source (TV channel, YouTube, Facebook or Parliament.ge) and start recording or schedule it. The system listens to the broadcast, turns speech into text, and automatically searches for the words in the chosen keyword profile. When it finishes, the recording is saved to history with speaker separation and highlighted keywords.",
+
+    a5:"You pick a source (TV channel, YouTube, Facebook or Parliament.ge) and start recording or schedule it. The system listens to the broadcast, converts speech into text, and automatically searches for words from the selected keyword profile. After completion, the recording is saved with speaker separation and highlighted keywords.",
+
     q6:"What does MVP mean for me?",
-    a6:"The product is at an early stage, and with every client we individually set up sources, keywords and report format. It's a chance to get a system tailored precisely to you — and to influence how it develops.",
-    ctaEyebrow:"Request a demo", ctaH2:"Start monitoring your brand",
-    ctaP:"Leave your details and we'll get in touch to choose sources and channels together and tailor the report format for you.",
-    ctaPt1:"Setup tailored to your sources", ctaPt2:"Live demo on real mentions and broadcast", ctaPt3:"A reply within 1 business day",
-    fName:"Full name", phName:"Your name", eName:"Please enter your name",
-    fEmail:"Work email", eEmail:"Enter a valid email",
-    fCompany:"Company / organization", phCompany:"Company name", eCompany:"Please enter your company",
-    fKw:"Brands or keywords", phKw:"e.g. Aura, Competitor X",
-    fMsg:"Message", phMsg:"Which function interests you — search, reports or TV monitoring? Which sources?",
+
+    a6:"The product is at an early stage, and with every client we individually set up sources, keywords and report formats. It gives you a system tailored precisely to your needs and the opportunity to influence its development.",
+
+    ctaEyebrow:"Request a demo",
+    ctaH2:"Start monitoring your brand",
+
+    ctaP:"Leave your details and we'll get in touch to choose the sources and channels that matter to you and tailor the report format.",
+
+    ctaPt1:"Setup tailored to your sources",
+    ctaPt2:"Live demo with real mentions and broadcast",
+    ctaPt3:"A reply within 1 business day",
+
+    fName:"Full name",
+    phName:"Your name",
+    eName:"Please enter your name",
+
+    fEmail:"Work email",
+    eEmail:"Enter a valid email",
+
+    fCompany:"Company / organization",
+    phCompany:"Company name",
+    eCompany:"Please enter your company",
+
+    fKw:"Brands or keywords",
+    phKw:"e.g. Aura, Competitor X",
+
+    fMsg:"Message",
+    phMsg:"Which function interests you: search, reports or TV monitoring? Which sources?",
+
     fSend:"Send demo request",
+
     fErr:"Something went wrong. Please try again or email us.",
+
     fNote:"No spam. Your details are used only to schedule the demo.",
-    okH:"Thanks! Received.", okP:"We've got your request. We'll be in touch within 1 business day to schedule the demo.",
-    footP:"An AI media-intelligence platform. Text, social and broadcast — in one place.",
-    footC1:"Functions", footC2:"Company", footC3:"Legal",
-    footAbout:"About", footBlog:"Blog", footContact:"Contact", footPriv:"Privacy", footTerms:"Terms",
+
+    okH:"Thanks! Received.",
+    okP:"We've received your request. We'll be in touch within 1 business day to schedule the demo.",
+
+    footP:"An AI media-intelligence platform. Text, social and broadcast in one place.",
+
+    footC1:"Functions",
+    footC2:"Company",
+    footC3:"Legal",
+
+    footAbout:"About",
+    footBlog:"Blog",
+    footContact:"Contact",
+    footPriv:"Privacy",
+    footTerms:"Terms",
+
     footCopy:"© 2026 MediaMonitoring AI. All rights reserved."
-  }
+}
 };
 
 /* feed + transcript data per language */
